@@ -10,7 +10,8 @@ public class Spawner : Singleton<Spawner>
 
     private void Start()
     {
-        Check();
+        if (GameManager.Instance.isInLevel)
+            Check();
     }
 
     public void Check()

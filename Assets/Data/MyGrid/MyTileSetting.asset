@@ -17,4 +17,4 @@ MonoBehaviour:
     distance: {x: 1.2, y: 1.2}
   hexagon:
     prefab: {fileID: -3732995658396545431, guid: a69f6fa6accb05945b598fa56195d556, type: 3}
-    distance: {x: 1.5, y: 1.5}
+    distance: {x: 1, y: 1}

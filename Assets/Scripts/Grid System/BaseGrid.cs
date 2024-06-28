@@ -8,9 +8,35 @@ public class BaseGrid : Singleton<BaseGrid>
 
     public void CheckGrid()
     {
-        CheckAndDestroyRow();
+        if (GameManager.Instance.isInLevel!)
+        {
+            CheckAndDestroyRow();
 
-        CheckAndDestroyColumn();
+            CheckAndDestroyColumn();
+        }
+        else
+        {
+            if (IsGridFull())
+            {
+                Debug.Log("Grid is full");
+            }
+
+            IsGridFull();
+        }
+        
+    }
+    
+    private bool IsGridFull()
+    {
+        foreach (var tile in _manager.Tiles)
+        {
+            var tileManager = tile.GetComponent<MyTile>();
+            if (tileManager.OnMyTile == null)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void CheckAndDestroyColumn()
