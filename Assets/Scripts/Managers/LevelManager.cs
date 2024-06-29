@@ -1,21 +1,33 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
+using Zenject;
 
 public class LevelManager : MonoBehaviour
 {
-    [CanBeNull] public LevelData playingLevelData;
+    private CountdownTimer _countdownTimer;
 
-    private void Start()
+    [Inject]
+    public void Construct(CountdownTimer countdownTimer)
     {
-        //test kodudur
-        playingLevelData = GameManager.Instance.playingLevelData;
+        _countdownTimer = countdownTimer;
     }
 
     public void CompleteLevel()
     {
-        //
+        GameManager.Instance.playingLevelData.isLevelCompleted = true;
+        _countdownTimer.PauseTimer();
+        Debug.Log("Level is complete");
+    }
+
+    public void FailLevel()
+    {
+        GameManager.Instance.DecreaseHealth();
+        _countdownTimer.PauseTimer();
+        Debug.Log("Level Failed");
+    }
+
+    public void ContinueLevel()
+    {
+        _countdownTimer.ResumeTimer();
     }
 }
