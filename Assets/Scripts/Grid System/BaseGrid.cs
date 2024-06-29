@@ -1,17 +1,17 @@
-    using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using MyGrid.Code;
 using UnityEngine;
 
 public class BaseGrid : Singleton<BaseGrid>
 {
-    [SerializeField] private GridManager _manager;
+    [SerializeField] private GridManager _gridmanager;
 
     public void CheckGrid()
     {
-        if (GameManager.Instance.isInLevel!)
+        if (GameManager.Instance.isInEndlessMode)
         {
             CheckAndDestroyRow();
-
             CheckAndDestroyColumn();
         }
         else
@@ -20,18 +20,18 @@ public class BaseGrid : Singleton<BaseGrid>
             {
                 Debug.Log("Grid is full");
             }
-
-            IsGridFull();
         }
-        
     }
-    
+
+    /// <summary>
+    /// Checks if the entire grid is full.
+    /// </summary>
     private bool IsGridFull()
     {
-        foreach (var tile in _manager.Tiles)
+        foreach (var tile in _gridmanager.Tiles)
         {
-            var tileManager = tile.GetComponent<MyTile>();
-            if (tileManager.OnMyTile == null)
+            var myTile = tile.GetComponent<MyTile>();
+            if (myTile == null || myTile.OnMyTile == null)
             {
                 return false;
             }
@@ -39,6 +39,9 @@ public class BaseGrid : Singleton<BaseGrid>
         return true;
     }
 
+    /// <summary>
+    /// Checks and destroys full columns in the grid.
+    /// </summary>
     private void CheckAndDestroyColumn()
     {
         List<int> willDestroyColumnIndex = new List<int>();
@@ -55,16 +58,18 @@ public class BaseGrid : Singleton<BaseGrid>
         {
             for (int y = 0; y < 10; y++)
             {
-                var tile = (MyTile)_manager.GetTile(new Vector2Int(column, y));
+                var tile = (MyTile)_gridmanager.GetTile(new Vector2Int(column, y));
                 if (tile.OnMyTile) tile.OnMyTile.Destroy(y * .05f);
             }
         }
     }
 
+    /// <summary>
+    /// Checks and destroys full rows in the grid.
+    /// </summary>
     private void CheckAndDestroyRow()
     {
         List<int> willDestroyRowIndex = new List<int>();
-
         for (int i = 0; i < 10; i++)
         {
             if (IsFullRow(i))
@@ -78,32 +83,35 @@ public class BaseGrid : Singleton<BaseGrid>
         {
             for (int x = 0; x < 10; x++)
             {
-                var tile = (MyTile)_manager.GetTile(new Vector2Int(x, rowIndex));
+                var tile = (MyTile)_gridmanager.GetTile(new Vector2Int(x, rowIndex));
                 if (tile.OnMyTile) tile.OnMyTile.Destroy(x * .05f);
             }
         }
     }
 
-
+    /// <summary>
+    /// Checks if a row is full.
+    /// </summary>
     private bool IsFullRow(int row)
     {
         for (int i = 0; i < 10; i++)
         {
-            var tile = (MyTile)_manager.GetTile(new Vector2Int(i, row));
+            var tile = (MyTile)_gridmanager.GetTile(new Vector2Int(i, row));
             if (!tile.OnMyTile) return false;
         }
-
         return true;
     }
 
+    /// <summary>
+    /// Checks if a column is full.
+    /// </summary>
     private bool IsFullColumn(int column)
     {
         for (int i = 0; i < 10; i++)
         {
-            var tile = (MyTile)_manager.GetTile(new Vector2Int(column, i));
+            var tile = (MyTile)_gridmanager.GetTile(new Vector2Int(column, i));
             if (!tile.OnMyTile) return false;
         }
-
         return true;
     }
 }

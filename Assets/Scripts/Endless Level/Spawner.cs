@@ -10,7 +10,7 @@ public class Spawner : Singleton<Spawner>
 
     private void Start()
     {
-        if (GameManager.Instance.isInLevel)
+        if (GameManager.Instance.isInEndlessMode)
             Check();
     }
 

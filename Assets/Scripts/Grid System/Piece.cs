@@ -45,8 +45,7 @@ public class Piece : MonoBehaviour
                 allowSetToGrid = false;
                 break;
             }
-
-            //OnMyTile
+            
             var baseTile = hit.transform.GetComponent<MyTile>();
             if (baseTile.OnMyTile)
             {
@@ -93,9 +92,11 @@ public class Piece : MonoBehaviour
         {
             SetPositionAll();
 
-            OnSetToGrid();
-            Spawner.Instance.Check();
-
+            if (GameManager.Instance.isInEndlessMode)
+            {
+                OnSetToGrid();
+                Spawner.Instance.Check();
+            }
             BaseGrid.Instance.CheckGrid();
         }
         else
